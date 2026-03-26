@@ -1,0 +1,115 @@
+# ============================================================
+# AI Shopping Assistant — requirements.txt
+# All versions exactly pinned for reproducible deployments.
+# Verified compatible as of March 2026.
+#
+# Install:
+#   pip install -r requirements.txt
+# ============================================================
+
+
+# ── LangGraph ecosystem ──────────────────────────────────────
+# These three must move together — mismatched versions between
+# langgraph, langgraph-prebuilt, and langgraph-checkpoint are
+# the #1 cause of "StateGraph has no attribute" deploy errors.
+
+langgraph==1.1.3
+langgraph-prebuilt==1.0.8
+langgraph-checkpoint==4.0.1
+langgraph-sdk==0.3.12
+
+
+# ── LangChain ecosystem ──────────────────────────────────────
+# langchain-core is the shared base for langgraph + langchain-mistralai.
+# All three must be compatible — pinned together to avoid
+# "AIMessage has no attribute tool_calls" type errors on deploy.
+
+langchain-core==1.2.22
+langchain==1.2.13
+langchain-mistralai==1.1.2
+
+
+# ── Mistral AI SDK ───────────────────────────────────────────
+# Used internally by langchain-mistralai for API calls.
+
+mistralai==2.1.3
+
+
+# ── Streamlit ────────────────────────────────────────────────
+
+streamlit==1.55.0
+
+
+# ── Database ─────────────────────────────────────────────────
+# mysql-connector-python 9.x has breaking API changes vs 8.x.
+# Pinned to 9.6.0 — the version execute_transaction is built against.
+
+mysql-connector-python==9.6.0
+
+
+# ── Redis ────────────────────────────────────────────────────
+# redis 7.x is required for WATCH/pipeline (optimistic locking).
+# Do NOT use redis 5.x or 6.x — pipeline API differs significantly.
+
+redis==7.4.0
+
+
+# ── Authentication ───────────────────────────────────────────
+
+bcrypt==4.2.1
+
+
+# ── Environment config ───────────────────────────────────────
+
+python-dotenv==1.2.1
+
+
+# ── HTTP client (used by mistralai + langchain internals) ────
+# httpx 0.28.x is required — 0.27.x has a breaking change in
+# how timeouts are handled that causes silent failures with Mistral.
+
+httpx==0.28.1
+httpcore==1.0.9
+
+
+# ── Data validation (used by langchain-core + pydantic models)
+# pydantic v2 is required — langchain-core 0.3+ dropped v1 support.
+
+pydantic==2.11.10
+
+
+# ── Async runtime ────────────────────────────────────────────
+# anyio 4.x required for httpx 0.28+ and langchain async support.
+
+anyio==4.13.0
+
+
+# ── Serialisation (used by langgraph state + langsmith) ──────
+
+orjson==3.10.18
+
+
+# ── Retry logic (used by langchain-core internally) ──────────
+
+tenacity==9.0.0
+
+
+# ── Type hints (required by langgraph TypedDict + Annotated) ─
+
+typing-extensions==4.13.2
+
+
+# ── LangSmith tracing (pulled in by langchain-core) ─────────
+
+langsmith==0.7.22
+
+
+# ── Packaging utility (used by streamlit + langchain) ────────
+
+packaging==24.2
+
+
+# ── C bindings for bcrypt ─────────────────────────────────────
+
+cffi==1.17.1
+cryptography==44.0.2
